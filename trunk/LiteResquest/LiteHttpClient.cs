@@ -39,110 +39,22 @@ namespace LiteResquest
         #endregion
 
         #region  --构造函数--
-
+        
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="encoding">请求过程中所使用的编码类型</param>
-        public LiteHttpClient(Encoding encoding)
+        /// <param name="cookieModel">请求过程中处理Cookie的模块</param>
+        /// <param name="thumbprint">请求过程中使用证书的指纹</param>
+        /// <param name="record">记录请求过程的模块</param>
+        public LiteHttpClient(Encoding encoding, ICookieModel cookieModel = null, string thumbprint = null, IProcessRecordModel record = null)
         {
             //初始化Cookie容器
             Encoding = encoding;
             Timeout = 300000;
-            CookieModel = new CookieContainerModel();
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="encoding">请求过程中所使用的编码类型</param>
-        /// <param name="thumbprint">请求过程中使用证书的指纹</param>
-        public LiteHttpClient(Encoding encoding, string thumbprint)
-            : this(encoding)
-        {
-            if (!string.IsNullOrEmpty(thumbprint)) CertModel = new ThumbprintCertModel(thumbprint);
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="encoding">请求过程中所使用的编码类型</param>
-        /// <param name="certModel">请求过程中使用的证书模块</param>
-        public LiteHttpClient(Encoding encoding, ICertModel certModel)
-            : this(encoding)
-        {
-            if (certModel != null) CertModel = certModel;
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="encoding">请求过程中所使用的编码类型</param>
-        /// <param name="cookieModel">请求过程中处理Cookie的模块</param>
-        public LiteHttpClient(Encoding encoding, ICookieModel cookieModel)
-            : this(encoding)
-        {
-            if (cookieModel != null) CookieModel = cookieModel;
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="encoding">请求过程中所使用的编码类型</param>
-        /// <param name="cookieModel">请求过程中处理Cookie的模块</param>
-        /// <param name="thumbprint">请求过程中使用证书的指纹</param>
-        public LiteHttpClient(Encoding encoding, ICookieModel cookieModel, String thumbprint)
-            : this(encoding, cookieModel)
-        {
-            if (!String.IsNullOrEmpty(thumbprint)) CertModel = new ThumbprintCertModel(thumbprint);
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="encoding">请求过程中所使用的编码类型</param>
-        /// <param name="cookieModel">请求过程中处理Cookie的模块</param>
-        /// <param name="certModel">请求过程中使用的证书模块</param>
-        public LiteHttpClient(Encoding encoding, ICookieModel cookieModel, ICertModel certModel)
-            : this(encoding, cookieModel)
-        {
-            if (certModel != null) CertModel = certModel;
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="encoding">请求过程中所使用的编码类型</param>
-        /// <param name="record">记录请求过程的模块</param>
-        public LiteHttpClient(Encoding encoding, IProcessRecordModel record)
-            : this(encoding)
-        {
-            if (record != null) Record = record;
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="encoding">请求过程中所使用的编码类型</param>
-        /// <param name="cookieModel">请求过程中处理Cookie的模块</param>
-        /// <param name="record">记录请求过程的模块</param>
-        public LiteHttpClient(Encoding encoding, ICookieModel cookieModel, IProcessRecordModel record)
-            : this(encoding, cookieModel)
-        {
-            if (record != null) Record = record;
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="encoding">请求过程中所使用的编码类型</param>
-        /// <param name="cookieModel">请求过程中处理Cookie的模块</param>
-        /// <param name="thumbprint">请求过程中使用证书的指纹</param>
-        /// <param name="record">记录请求过程的模块</param>
-        public LiteHttpClient(Encoding encoding, ICookieModel cookieModel, String thumbprint, IProcessRecordModel record)
-            : this(encoding, cookieModel, thumbprint)
-        {
-            if (record != null) Record = record;
+            CookieModel = cookieModel ?? new CookieContainerModel();
+            CertModel = string.IsNullOrEmpty(thumbprint) ? null : new ThumbprintCertModel(thumbprint);
+            Record = record;
         }
 
         /// <summary>
@@ -152,10 +64,14 @@ namespace LiteResquest
         /// <param name="cookieModel">请求过程中处理Cookie的模块</param>
         /// <param name="certModel">请求过程中使用的证书模块</param>
         /// <param name="record">记录请求过程的模块</param>
-        public LiteHttpClient(Encoding encoding, ICookieModel cookieModel, ICertModel certModel, IProcessRecordModel record)
-            : this(encoding, cookieModel, certModel)
+        public LiteHttpClient(Encoding encoding, ICookieModel cookieModel = null, ICertModel certModel = null, IProcessRecordModel record = null)
         {
-            if (record != null) Record = record;
+            //初始化Cookie容器
+            Encoding = encoding;
+            Timeout = 300000;
+            CookieModel = cookieModel ?? new CookieContainerModel();
+            CertModel = certModel;
+            Record = record;
         }
 
         #endregion
@@ -621,6 +537,4 @@ namespace LiteResquest
 
         #endregion
     }
-
-
 }
