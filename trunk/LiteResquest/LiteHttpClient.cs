@@ -39,23 +39,6 @@ namespace LiteResquest
         #endregion
 
         #region  --构造函数--
-        
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="encoding">请求过程中所使用的编码类型</param>
-        /// <param name="cookieModel">请求过程中处理Cookie的模块</param>
-        /// <param name="thumbprint">请求过程中使用证书的指纹</param>
-        /// <param name="record">记录请求过程的模块</param>
-        public LiteHttpClient(Encoding encoding, ICookieModel cookieModel = null, string thumbprint = null, IProcessRecordModel record = null)
-        {
-            //初始化Cookie容器
-            Encoding = encoding;
-            Timeout = 300000;
-            CookieModel = cookieModel ?? new CookieContainerModel();
-            CertModel = string.IsNullOrEmpty(thumbprint) ? null : new ThumbprintCertModel(thumbprint);
-            Record = record;
-        }
 
         /// <summary>
         /// 构造函数
@@ -70,7 +53,7 @@ namespace LiteResquest
             Encoding = encoding;
             Timeout = 300000;
             CookieModel = cookieModel ?? new CookieContainerModel();
-            CertModel = certModel;
+            CertModel = certModel;//new ThumbprintCertModel(thumbprint)
             Record = record;
         }
 
