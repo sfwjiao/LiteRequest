@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Net;
@@ -135,7 +136,7 @@ namespace LiteResquest
             request.Timeout = Timeout;
 
             //获得响应
-            var response = (HttpWebResponse) await request.GetResponseAsync();
+            var response = (HttpWebResponse)await request.GetResponseAsync();
             CookieModel.GetCookies(response);
             Record?.Record(request, response);
 
@@ -372,7 +373,18 @@ namespace LiteResquest
         /// <returns>响应对象</returns>
         public HttpWebResponse Post(HttpWebRequest request, NameValueCollection collection)
         {
-            return Post(request, NameValueCollectionToString(collection));
+            return Post(request, NameValueCollectionToString(collection, Encoding));
+        }
+
+        /// <summary>
+        /// POST方式获得响应
+        /// </summary>
+        /// <param name="request">请求对象</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <returns>响应对象</returns>
+        public HttpWebResponse Post(HttpWebRequest request, IDictionary<string, string> paramaters)
+        {
+            return Post(request, DictionaryToString(paramaters, Encoding));
         }
 
         /// <summary>
@@ -383,7 +395,18 @@ namespace LiteResquest
         /// <returns>响应对象</returns>
         public async Task<HttpWebResponse> PostAsync(HttpWebRequest request, NameValueCollection collection)
         {
-            return await PostAsync(request, NameValueCollectionToString(collection));
+            return await PostAsync(request, NameValueCollectionToString(collection, Encoding));
+        }
+
+        /// <summary>
+        /// POST方式获得响应
+        /// </summary>
+        /// <param name="request">请求对象</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <returns>响应对象</returns>
+        public async Task<HttpWebResponse> PostAsync(HttpWebRequest request, IDictionary<string, string> paramaters)
+        {
+            return await PostAsync(request, DictionaryToString(paramaters, Encoding));
         }
 
         /// <summary>
@@ -394,7 +417,18 @@ namespace LiteResquest
         /// <returns>响应对象</returns>
         public HttpWebResponse Post(string url, NameValueCollection collection)
         {
-            return Post(url, NameValueCollectionToString(collection));
+            return Post(url, NameValueCollectionToString(collection, Encoding));
+        }
+
+        /// <summary>
+        /// POST方式获得响应
+        /// </summary>
+        /// <param name="url">请求地址</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <returns>响应对象</returns>
+        public HttpWebResponse Post(string url, IDictionary<string, string> paramaters)
+        {
+            return Post(url, DictionaryToString(paramaters, Encoding));
         }
 
         /// <summary>
@@ -405,7 +439,18 @@ namespace LiteResquest
         /// <returns>响应对象</returns>
         public async Task<HttpWebResponse> PostAsync(string url, NameValueCollection collection)
         {
-            return await PostAsync(url, NameValueCollectionToString(collection));
+            return await PostAsync(url, NameValueCollectionToString(collection, Encoding));
+        }
+
+        /// <summary>
+        /// POST方式获得响应
+        /// </summary>
+        /// <param name="url">请求地址</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <returns>响应对象</returns>
+        public async Task<HttpWebResponse> PostAsync(string url, IDictionary<string, string> paramaters)
+        {
+            return await PostAsync(url, DictionaryToString(paramaters, Encoding));
         }
 
         /// <summary>
@@ -467,11 +512,33 @@ namespace LiteResquest
         /// POST方式获得响应流
         /// </summary>
         /// <param name="request">请求对象</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <returns>内存流</returns>
+        public MemoryStream PostStream(HttpWebRequest request, IDictionary<string, string> paramaters)
+        {
+            return StreamFromResponse(Post(request, paramaters));
+        }
+
+        /// <summary>
+        /// POST方式获得响应流
+        /// </summary>
+        /// <param name="request">请求对象</param>
         /// <param name="collection">参数集合对象</param>
         /// <returns>内存流</returns>
         public async Task<MemoryStream> PostStreamAsync(HttpWebRequest request, NameValueCollection collection)
         {
             return StreamFromResponse(await PostAsync(request, collection));
+        }
+
+        /// <summary>
+        /// POST方式获得响应流
+        /// </summary>
+        /// <param name="request">请求对象</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <returns>内存流</returns>
+        public async Task<MemoryStream> PostStreamAsync(HttpWebRequest request, IDictionary<string, string> paramaters)
+        {
+            return StreamFromResponse(await PostAsync(request, paramaters));
         }
 
         /// <summary>
@@ -489,11 +556,33 @@ namespace LiteResquest
         /// POST方式获得响应流
         /// </summary>
         /// <param name="url">请求地址</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <returns>内存流</returns>
+        public MemoryStream PostStream(string url, IDictionary<string, string> paramaters)
+        {
+            return StreamFromResponse(Post(url, paramaters));
+        }
+
+        /// <summary>
+        /// POST方式获得响应流
+        /// </summary>
+        /// <param name="url">请求地址</param>
         /// <param name="collection">参数集合对象</param>
         /// <returns>内存流</returns>
         public async Task<MemoryStream> PostStreamAsync(string url, NameValueCollection collection)
         {
             return StreamFromResponse(await PostAsync(url, collection));
+        }
+
+        /// <summary>
+        /// POST方式获得响应流
+        /// </summary>
+        /// <param name="url">请求地址</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <returns>内存流</returns>
+        public async Task<MemoryStream> PostStreamAsync(string url, IDictionary<string, string> paramaters)
+        {
+            return StreamFromResponse(await PostAsync(url, paramaters));
         }
 
         /// <summary>
@@ -560,12 +649,36 @@ namespace LiteResquest
         /// POST方式获得响应流
         /// </summary>
         /// <param name="request">请求对象</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <param name="fileName">文件地址</param>
+        /// <returns>内存流</returns>
+        public void PostSaveAs(HttpWebRequest request, IDictionary<string, string> paramaters, string fileName)
+        {
+            SaveAsFromResponse(Post(request, paramaters), fileName);
+        }
+
+        /// <summary>
+        /// POST方式获得响应流
+        /// </summary>
+        /// <param name="request">请求对象</param>
         /// <param name="collection">参数集合对象</param>
         /// <param name="fileName">文件地址</param>
         /// <returns>内存流</returns>
         public async Task PostSaveAsAsync(HttpWebRequest request, NameValueCollection collection, string fileName)
         {
             SaveAsFromResponse(await PostAsync(request, collection), fileName);
+        }
+
+        /// <summary>
+        /// POST方式获得响应流
+        /// </summary>
+        /// <param name="request">请求对象</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <param name="fileName">文件地址</param>
+        /// <returns>内存流</returns>
+        public async Task PostSaveAsAsync(HttpWebRequest request, IDictionary<string, string> paramaters, string fileName)
+        {
+            SaveAsFromResponse(await PostAsync(request, paramaters), fileName);
         }
 
         /// <summary>
@@ -584,12 +697,36 @@ namespace LiteResquest
         /// POST方式获得响应流
         /// </summary>
         /// <param name="url">请求地址</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <param name="fileName">文件地址</param>
+        /// <returns>内存流</returns>
+        public void PostSaveAs(string url, IDictionary<string, string> paramaters, string fileName)
+        {
+            SaveAsFromResponse(Post(url, paramaters), fileName);
+        }
+
+        /// <summary>
+        /// POST方式获得响应流
+        /// </summary>
+        /// <param name="url">请求地址</param>
         /// <param name="collection">参数集合对象</param>
         /// <param name="fileName">文件地址</param>
         /// <returns>内存流</returns>
         public async Task PostSaveAsAsync(string url, NameValueCollection collection, string fileName)
         {
             SaveAsFromResponse(await PostAsync(url, collection), fileName);
+        }
+
+        /// <summary>
+        /// POST方式获得响应流
+        /// </summary>
+        /// <param name="url">请求地址</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <param name="fileName">文件地址</param>
+        /// <returns>内存流</returns>
+        public async Task PostSaveAsAsync(string url, IDictionary<string, string> paramaters, string fileName)
+        {
+            SaveAsFromResponse(await PostAsync(url, paramaters), fileName);
         }
 
         /// <summary>
@@ -651,11 +788,33 @@ namespace LiteResquest
         /// POST方式获得响应流
         /// </summary>
         /// <param name="request">请求对象</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <returns>响应字符串</returns>
+        public string PostString(HttpWebRequest request, IDictionary<string, string> paramaters)
+        {
+            return StringFromResponse(Post(request, paramaters), Encoding);
+        }
+
+        /// <summary>
+        /// POST方式获得响应流
+        /// </summary>
+        /// <param name="request">请求对象</param>
         /// <param name="collection">参数集合对象</param>
         /// <returns>响应字符串</returns>
         public async Task<string> PostStringAsync(HttpWebRequest request, NameValueCollection collection)
         {
             return StringFromResponse(await PostAsync(request, collection), Encoding);
+        }
+
+        /// <summary>
+        /// POST方式获得响应流
+        /// </summary>
+        /// <param name="request">请求对象</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <returns>响应字符串</returns>
+        public async Task<string> PostStringAsync(HttpWebRequest request, IDictionary<string, string> paramaters)
+        {
+            return StringFromResponse(await PostAsync(request, paramaters), Encoding);
         }
 
         /// <summary>
@@ -673,11 +832,33 @@ namespace LiteResquest
         /// POST方式获得响应流
         /// </summary>
         /// <param name="url">请求地址</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <returns>响应字符串</returns>
+        public string PostString(string url, IDictionary<string, string> paramaters)
+        {
+            return StringFromResponse(Post(url, paramaters), Encoding);
+        }
+
+        /// <summary>
+        /// POST方式获得响应流
+        /// </summary>
+        /// <param name="url">请求地址</param>
         /// <param name="collection">参数集合对象</param>
         /// <returns>响应字符串</returns>
         public async Task<string> PostStringAsync(string url, NameValueCollection collection)
         {
             return StringFromResponse(await PostAsync(url, collection), Encoding);
+        }
+
+        /// <summary>
+        /// POST方式获得响应流
+        /// </summary>
+        /// <param name="url">请求地址</param>
+        /// <param name="paramaters">参数集合对象</param>
+        /// <returns>响应字符串</returns>
+        public async Task<string> PostStringAsync(string url, IDictionary<string, string> paramaters)
+        {
+            return StringFromResponse(await PostAsync(url, paramaters), Encoding);
         }
 
         #endregion
@@ -776,12 +957,14 @@ namespace LiteResquest
 
         #region  --似有方法--
 
+
         /// <summary>
         /// 创建参数字符串
         /// </summary>
         /// <param name="collection">参数字典</param>
+        /// <param name="encoding">编码格式</param>
         /// <returns>字符串</returns>
-        private static string NameValueCollectionToString(NameValueCollection collection)
+        private static string NameValueCollectionToString(NameValueCollection collection, Encoding encoding)
         {
             var returnValue = new StringBuilder();
 
@@ -790,7 +973,32 @@ namespace LiteResquest
             {
                 returnValue.Append(key);
                 returnValue.Append("=");
-                returnValue.Append(collection[key]);
+                returnValue.Append(HttpUtility.UrlEncode(collection[key], encoding));
+                returnValue.Append("&");
+            }
+
+            //删除最后一个&连接符号
+            if (returnValue.ToString().EndsWith("&", StringComparison.OrdinalIgnoreCase)) returnValue.Remove(returnValue.Length - 1, 1);
+
+            return returnValue.ToString();
+        }
+
+        /// <summary>
+        /// 创建参数字符串
+        /// </summary>
+        /// <param name="paramaters">参数字典</param>
+        /// <param name="encoding">编码格式</param>
+        /// <returns>字符串</returns>
+        private static string DictionaryToString(IDictionary<string, string> paramaters, Encoding encoding)
+        {
+            var returnValue = new StringBuilder();
+
+            //循环字典，将参数集合转换成字符串
+            foreach (string key in paramaters.Keys)
+            {
+                returnValue.Append(key);
+                returnValue.Append("=");
+                returnValue.Append(HttpUtility.UrlEncode(paramaters[key], encoding));
                 returnValue.Append("&");
             }
 
