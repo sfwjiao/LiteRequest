@@ -382,7 +382,7 @@ namespace LiteResquest
         /// <param name="request">请求对象</param>
         /// <param name="paramaters">参数集合对象</param>
         /// <returns>响应对象</returns>
-        public HttpWebResponse Post(HttpWebRequest request, IDictionary<string, string> paramaters)
+        public HttpWebResponse Post(HttpWebRequest request, IEnumerable<KeyValuePair<string, string>> paramaters)
         {
             return Post(request, DictionaryToString(paramaters, Encoding));
         }
@@ -404,7 +404,7 @@ namespace LiteResquest
         /// <param name="request">请求对象</param>
         /// <param name="paramaters">参数集合对象</param>
         /// <returns>响应对象</returns>
-        public async Task<HttpWebResponse> PostAsync(HttpWebRequest request, IDictionary<string, string> paramaters)
+        public async Task<HttpWebResponse> PostAsync(HttpWebRequest request, IEnumerable<KeyValuePair<string, string>> paramaters)
         {
             return await PostAsync(request, DictionaryToString(paramaters, Encoding));
         }
@@ -426,7 +426,7 @@ namespace LiteResquest
         /// <param name="url">请求地址</param>
         /// <param name="paramaters">参数集合对象</param>
         /// <returns>响应对象</returns>
-        public HttpWebResponse Post(string url, IDictionary<string, string> paramaters)
+        public HttpWebResponse Post(string url, IEnumerable<KeyValuePair<string, string>> paramaters)
         {
             return Post(url, DictionaryToString(paramaters, Encoding));
         }
@@ -448,7 +448,7 @@ namespace LiteResquest
         /// <param name="url">请求地址</param>
         /// <param name="paramaters">参数集合对象</param>
         /// <returns>响应对象</returns>
-        public async Task<HttpWebResponse> PostAsync(string url, IDictionary<string, string> paramaters)
+        public async Task<HttpWebResponse> PostAsync(string url, IEnumerable<KeyValuePair<string, string>> paramaters)
         {
             return await PostAsync(url, DictionaryToString(paramaters, Encoding));
         }
@@ -514,7 +514,7 @@ namespace LiteResquest
         /// <param name="request">请求对象</param>
         /// <param name="paramaters">参数集合对象</param>
         /// <returns>内存流</returns>
-        public MemoryStream PostStream(HttpWebRequest request, IDictionary<string, string> paramaters)
+        public MemoryStream PostStream(HttpWebRequest request, IEnumerable<KeyValuePair<string, string>> paramaters)
         {
             return StreamFromResponse(Post(request, paramaters));
         }
@@ -536,7 +536,7 @@ namespace LiteResquest
         /// <param name="request">请求对象</param>
         /// <param name="paramaters">参数集合对象</param>
         /// <returns>内存流</returns>
-        public async Task<MemoryStream> PostStreamAsync(HttpWebRequest request, IDictionary<string, string> paramaters)
+        public async Task<MemoryStream> PostStreamAsync(HttpWebRequest request, IEnumerable<KeyValuePair<string, string>> paramaters)
         {
             return StreamFromResponse(await PostAsync(request, paramaters));
         }
@@ -558,7 +558,7 @@ namespace LiteResquest
         /// <param name="url">请求地址</param>
         /// <param name="paramaters">参数集合对象</param>
         /// <returns>内存流</returns>
-        public MemoryStream PostStream(string url, IDictionary<string, string> paramaters)
+        public MemoryStream PostStream(string url, IEnumerable<KeyValuePair<string, string>> paramaters)
         {
             return StreamFromResponse(Post(url, paramaters));
         }
@@ -580,7 +580,7 @@ namespace LiteResquest
         /// <param name="url">请求地址</param>
         /// <param name="paramaters">参数集合对象</param>
         /// <returns>内存流</returns>
-        public async Task<MemoryStream> PostStreamAsync(string url, IDictionary<string, string> paramaters)
+        public async Task<MemoryStream> PostStreamAsync(string url, IEnumerable<KeyValuePair<string, string>> paramaters)
         {
             return StreamFromResponse(await PostAsync(url, paramaters));
         }
@@ -652,7 +652,7 @@ namespace LiteResquest
         /// <param name="paramaters">参数集合对象</param>
         /// <param name="fileName">文件地址</param>
         /// <returns>内存流</returns>
-        public void PostSaveAs(HttpWebRequest request, IDictionary<string, string> paramaters, string fileName)
+        public void PostSaveAs(HttpWebRequest request, IEnumerable<KeyValuePair<string, string>> paramaters, string fileName)
         {
             SaveAsFromResponse(Post(request, paramaters), fileName);
         }
@@ -676,7 +676,7 @@ namespace LiteResquest
         /// <param name="paramaters">参数集合对象</param>
         /// <param name="fileName">文件地址</param>
         /// <returns>内存流</returns>
-        public async Task PostSaveAsAsync(HttpWebRequest request, IDictionary<string, string> paramaters, string fileName)
+        public async Task PostSaveAsAsync(HttpWebRequest request, IEnumerable<KeyValuePair<string, string>> paramaters, string fileName)
         {
             SaveAsFromResponse(await PostAsync(request, paramaters), fileName);
         }
@@ -700,7 +700,7 @@ namespace LiteResquest
         /// <param name="paramaters">参数集合对象</param>
         /// <param name="fileName">文件地址</param>
         /// <returns>内存流</returns>
-        public void PostSaveAs(string url, IDictionary<string, string> paramaters, string fileName)
+        public void PostSaveAs(string url, IEnumerable<KeyValuePair<string, string>> paramaters, string fileName)
         {
             SaveAsFromResponse(Post(url, paramaters), fileName);
         }
@@ -724,7 +724,7 @@ namespace LiteResquest
         /// <param name="paramaters">参数集合对象</param>
         /// <param name="fileName">文件地址</param>
         /// <returns>内存流</returns>
-        public async Task PostSaveAsAsync(string url, IDictionary<string, string> paramaters, string fileName)
+        public async Task PostSaveAsAsync(string url, IEnumerable<KeyValuePair<string, string>> paramaters, string fileName)
         {
             SaveAsFromResponse(await PostAsync(url, paramaters), fileName);
         }
@@ -790,7 +790,7 @@ namespace LiteResquest
         /// <param name="request">请求对象</param>
         /// <param name="paramaters">参数集合对象</param>
         /// <returns>响应字符串</returns>
-        public string PostString(HttpWebRequest request, IDictionary<string, string> paramaters)
+        public string PostString(HttpWebRequest request, IEnumerable<KeyValuePair<string, string>> paramaters)
         {
             return StringFromResponse(Post(request, paramaters), Encoding);
         }
@@ -812,7 +812,7 @@ namespace LiteResquest
         /// <param name="request">请求对象</param>
         /// <param name="paramaters">参数集合对象</param>
         /// <returns>响应字符串</returns>
-        public async Task<string> PostStringAsync(HttpWebRequest request, IDictionary<string, string> paramaters)
+        public async Task<string> PostStringAsync(HttpWebRequest request, IEnumerable<KeyValuePair<string, string>> paramaters)
         {
             return StringFromResponse(await PostAsync(request, paramaters), Encoding);
         }
@@ -834,7 +834,7 @@ namespace LiteResquest
         /// <param name="url">请求地址</param>
         /// <param name="paramaters">参数集合对象</param>
         /// <returns>响应字符串</returns>
-        public string PostString(string url, IDictionary<string, string> paramaters)
+        public string PostString(string url, IEnumerable<KeyValuePair<string, string>> paramaters)
         {
             return StringFromResponse(Post(url, paramaters), Encoding);
         }
@@ -856,7 +856,7 @@ namespace LiteResquest
         /// <param name="url">请求地址</param>
         /// <param name="paramaters">参数集合对象</param>
         /// <returns>响应字符串</returns>
-        public async Task<string> PostStringAsync(string url, IDictionary<string, string> paramaters)
+        public async Task<string> PostStringAsync(string url, IEnumerable<KeyValuePair<string, string>> paramaters)
         {
             return StringFromResponse(await PostAsync(url, paramaters), Encoding);
         }
@@ -989,16 +989,16 @@ namespace LiteResquest
         /// <param name="paramaters">参数字典</param>
         /// <param name="encoding">编码格式</param>
         /// <returns>字符串</returns>
-        private static string DictionaryToString(IDictionary<string, string> paramaters, Encoding encoding)
+        private static string DictionaryToString(IEnumerable<KeyValuePair<string, string>> paramaters, Encoding encoding)
         {
             var returnValue = new StringBuilder();
 
             //循环字典，将参数集合转换成字符串
-            foreach (string key in paramaters.Keys)
+            foreach (var paramater in paramaters)
             {
-                returnValue.Append(key);
+                returnValue.Append(paramater.Key);
                 returnValue.Append("=");
-                returnValue.Append(HttpUtility.UrlEncode(paramaters[key], encoding));
+                returnValue.Append(HttpUtility.UrlEncode(paramater.Value, encoding));
                 returnValue.Append("&");
             }
 

@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Isaac.Joy.Cn</Authors>
+    <Company>Isaac.Joy.Cn</Company>
+    <Product>JoySoft</Product>
   </PropertyGroup>
 
 </Project>
