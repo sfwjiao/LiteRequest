@@ -94,18 +94,11 @@ namespace LiteResquest
         /// <returns>响应对象</returns>
         public HttpWebResponse Get(HttpWebRequest request)
         {
-            //设置安全请求模式
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
-
-            //添加cookie
-            CookieModel.SetCookies(request);
-
-            //添加证书
-            CertModel?.SetCert(request);
+            //初始化请求
+            InitRequest(request);
 
             //设置请求方式
             request.Method = "GET";
-            request.Timeout = Timeout;
 
             //获得响应
             var response = (HttpWebResponse)request.GetResponse();
@@ -122,18 +115,11 @@ namespace LiteResquest
         /// <returns>响应对象</returns>
         public async Task<HttpWebResponse> GetAsync(HttpWebRequest request)
         {
-            //设置安全请求模式
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
-
-            //添加cookie
-            CookieModel.SetCookies(request);
-
-            //添加证书
-            CertModel?.SetCert(request);
+            //初始化请求
+            InitRequest(request);
 
             //设置请求方式
             request.Method = "GET";
-            request.Timeout = Timeout;
 
             //获得响应
             var response = (HttpWebResponse)await request.GetResponseAsync();
@@ -291,18 +277,12 @@ namespace LiteResquest
         /// <returns>响应对象</returns>
         public HttpWebResponse Post(HttpWebRequest request, string param)
         {
-            //设置安全请求模式
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
-
-            //添加cookie
-            CookieModel.SetCookies(request);
-
-            //添加证书
-            CertModel?.SetCert(request);
+            //初始化请求
+            InitRequest(request);
 
             //设置请求方式
             request.Method = "POST";
-            request.Timeout = Timeout;
+
             if (!string.IsNullOrEmpty(param)) SetPostData(request, param);
 
             //获得响应并设置Cookies
@@ -321,18 +301,12 @@ namespace LiteResquest
         /// <returns>响应对象</returns>
         public async Task<HttpWebResponse> PostAsync(HttpWebRequest request, string param)
         {
-            //设置安全请求模式
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
-
-            //添加cookie
-            CookieModel.SetCookies(request);
-
-            //添加证书
-            CertModel?.SetCert(request);
+            //初始化请求
+            InitRequest(request);
 
             //设置请求方式
             request.Method = "POST";
-            request.Timeout = Timeout;
+
             if (!string.IsNullOrEmpty(param)) SetPostData(request, param);
 
             //获得响应并设置Cookies
@@ -1022,6 +996,35 @@ namespace LiteResquest
             var requestStream = request.GetRequestStream();
             requestStream.Write(param, 0, param.Length);
             requestStream.Close();
+        }
+
+        /// <summary>
+        /// 初始化请求
+        /// </summary>
+        /// <param name="request"></param>
+        private void InitRequest(HttpWebRequest request)
+        {
+            //设置安全请求模式
+            if (request.RequestUri.ToString().ToLower().StartsWith("https:"))
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+                //添加证书
+                if (CertModel != null)
+                {
+                    CertModel.SetCert(request);
+
+                }
+                else
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, errors) => true;
+                }
+            }
+
+            //添加cookie
+            CookieModel.SetCookies(request);
+
+            //超时时间
+            request.Timeout = Timeout;
         }
 
         #endregion
