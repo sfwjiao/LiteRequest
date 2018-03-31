@@ -1,0 +1,2 @@
+# LiteRequest
+针对HttpWebRequest请求，HttpWebResponse响应的相关封装
